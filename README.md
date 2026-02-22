@@ -22,5 +22,6 @@ EOF
 root@Ubuntu22:~# cat /etc/cron.hourly/email_script
 sendmail teacher@otus.ru < /root/email.txt
 root@Ubuntu22:~#
+root@Ubuntu22:~# grep  -o -E "http.*" /var/log/nginx/access-4560-644067.log | awk '{print$1}' | sed -r 's/https?:\/\/([^/]*).*/\1/' | sort | uniq -c | sort -n >> /root/email.txt
 
 ```
