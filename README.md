@@ -15,4 +15,12 @@ HTTP-коды ответов с указанием их количества (с
 
 Критерии оценки:
 Трапы и функции, а также sed и find
+```
+root@Ubuntu22:~# cat << EOF > /etc/cron.hourly/email_script
+> sendmail teacher@otus.ru < /root/email.txt
+EOF
+root@Ubuntu22:~# cat /etc/cron.hourly/email_script
+sendmail teacher@otus.ru < /root/email.txt
+root@Ubuntu22:~#
 
+```
