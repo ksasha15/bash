@@ -13,8 +13,6 @@ HTTP-коды ответов с указанием их количества (с
 
 В письме должен быть прописан обрабатываемый временной диапазон.\
 
-Критерии оценки:
-Трапы и функции, а также sed и find
 ```
 root@Ubuntu22:~# cat << EOF > /etc/cron.hourly/email_script
 > sendmail teacher@otus.ru < /root/email.txt
@@ -71,5 +69,28 @@ root@Ubuntu22:~# cat /var/log/nginx/error.log.1
 2026/02/16 05:36:06 [emerg] 2390#2390: still could not bind()
 root@Ubuntu22:~# cat /var/log/nginx/error.log.1 >> /root/email.txt
 root@Ubuntu22:~#
-
+root@Ubuntu22:~# awk '{print$0}' /var/log/nginx/access-4560-644067.log | grep -oE '\ [0-9]{3}\ ' | sort | uniq -c | sort -n
+      1  304
+      1  403
+      1  405
+      2  499
+      3  500
+     18  400
+     51  404
+     95  301
+    498  200
+root@Ubuntu22:~#
+root@Ubuntu22:~# awk '{print$0}' /var/log/nginx/access-4560-644067.log | grep -oE '\ [0-9]{3}\ ' | sort | uniq -c | sort -n >> /root/email.txt
+root@Ubuntu22:~#
+```
+##### добавляем обнуление email сообщения в крон (каждые 45 минут)
+```
+root@Ubuntu22:~# cat /dev/null > email.txt
+root@Ubuntu22:~# cat email.txt
+root@Ubuntu22:~#cat << EOF > /root/zeroing
+> cat /dev/null > email.txt
+EOF
+root@Ubuntu22:~# cat << EOF >> /etc/crontab
+45 * * * * root /root/zeroing
+EOF
 ```
