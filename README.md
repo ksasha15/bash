@@ -81,7 +81,18 @@ root@Ubuntu22:~# awk '{print$0}' /var/log/nginx/access-4560-644067.log | grep -o
     498  200
 root@Ubuntu22:~#
 root@Ubuntu22:~# awk '{print$0}' /var/log/nginx/access-4560-644067.log | grep -oE '\ [0-9]{3}\ ' | sort | uniq -c | sort -n >> /root/email.txt
-root@Ubuntu22:~#
+
+#!/bin/bash
+LOCKFILE="/tmp/myscript.lock"
+(
+    flock -n 200 || exit 1
+    /etc/cron.hourly/email_script
+    echo "Скрипт запущен!"
+    sleep 10
+    echo "Работа выполнена."
+) 200>$LOCKFILE
+
+root@Ubuntu22:~# TIME=$(cat /var/log/cron | grep email | sort | tail -1 | awk '{print $3}') >> /root/email.txt
 ```
 ##### добавляем обнуление email сообщения в крон (каждые 45 минут)
 ```
